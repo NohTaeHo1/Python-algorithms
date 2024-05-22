@@ -33,9 +33,9 @@ class CrimeService:
         self.data.crime = 'crime_in_seoul.csv'
         self.data.cctv = 'cctv_in_seoul.csv'
         self.data.pop = 'pop_in_seoul'
-        self.crime_rate_columns = ['살인 검거율', '강도 검거율', '강감 검거율', '절도 검거율', '폭력 검거율']
+        self.crime_rate_columns = ['살인 검거율', '강도 검거율', '강간 검거율', '절도 검거율', '폭력 검거율']
         self.crime_columns = ['살인 발생', '강도 발생', '강간 발생', '절도 발생', '폭력 발생']
-        self.arrest_columns = ['살인 검거', '강도 검거', '강감 검거', '절도 검거', '폭력 검거']
+        self.arrest_columns = ['살인 검거', '강도 검거', '강간 검거', '절도 검거', '폭력 검거']
         self.pop_columns = ['자치구', '합계', '한국인', '등록외국인', '65세이상고령자']
 
     def crime_dataframe(self) -> pd.DataFrame:
@@ -111,7 +111,7 @@ class CrimeService:
         crime.to_csv(f'{self.data.sname}police_position.csv')
         stations.to_csv(f'{self.data.sname}police_position.csv')
 
-    def save_cctv_population(self) -> None:
+    def save_population_cctv_correlation(self) -> None:
         reader = Reader()
         population = reader.excel(f'{self.data.dname}pop_in_seoul', 2, 'B, D, G, J, N')
         cctv = self.cctv_dataframe()
@@ -139,7 +139,7 @@ class CrimeService:
         ic(f'고령자비율과 CCTV의 상관계수 {str(cor1)}\n'
            f'외국인비율과 CCTV의 상관계수 {str(cor2)}')
 
-    def save_crime_per_cctv(self) -> pd.DataFrame:
+    def save_crime_cctv_correlation(self) -> pd.DataFrame:
         crime = self.crime_dataframe()
         cctv = self.cctv_dataframe()
 
@@ -286,6 +286,10 @@ class CrimeService:
             legend_name="Crime Rate (%)",
             reset=True
         ).add_to(m)
+        for i in police_position.index:
+            folium.CircleMarker([police_position['lat'][i], police_position['lng'][i]],
+                          radius=police_position['검거'][i] * 10,
+                          fill_color='#0a0a32').add_to(m)
 
         folium.LayerControl().add_to(m)
         m.save(f'{self.data.sname}kr_states.html')
