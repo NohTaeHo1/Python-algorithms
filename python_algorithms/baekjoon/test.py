@@ -1,8 +1,8 @@
 
 
 if __name__ == '__main__':
-    test = []
-    test.append(3)
-    print(2 in test)
-
-    print(test.pop(0))
+    vowels = ['a', 'e', 'i', 'o', 'u']
+    while(True):
+        test_case = input()
+        while():
+            print(any(i in test_case for i in vowels))

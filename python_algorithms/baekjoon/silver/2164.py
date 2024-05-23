@@ -1,25 +1,17 @@
 import sys
+from collections import deque
 
 
 def main():
 
-    cards = list(range(1, int(sys.stdin.readline().strip())))
-    for i in range(len(cards)):
-        cards.append(i + 1)
+    n = int(sys.stdin.readline().strip())
+    cards = deque(range(1, n+1))
 
-    while len(cards) != 1:
-        remove(cards)
-        two_card_move(cards)
+    while len(cards) > 1:
+        cards.popleft()
+        cards.append(cards.popleft())
 
-    print(cards.pop(0))
-
-
-def remove(cards):
-    cards.pop(0)
-
-
-def two_card_move(cards):
-    cards.append(cards.pop(0))
+    print(cards.pop())
 
 
 if __name__ == '__main__':
